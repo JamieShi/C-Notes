@@ -1,9 +1,9 @@
-#Lec14, System Modelling, UML, Relationship#
+# Lec14, System Modelling, UML, Relationship #
 
 
-### Relationship 1: Composition###
+### Relationship 1: Composition ###
 
-### Relationship 2: Aggregation###
+### Relationship 2: Aggregation ###
 
 ### Relationship 3: Inheritance ###
 
