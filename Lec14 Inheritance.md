@@ -1,4 +1,4 @@
-# Lec14, System Modelling, UML, Relationship #
+# Lec14, System Modelling, UML, Relationship#
 
 
 ### Relationship 1: Composition ###
@@ -86,7 +86,7 @@ Some terms of Book & Text:
 - ( Anything you can do with cin (istream), you can do it with ifstream/istringstream )
 
 
-### Inheriting Private members###
+### Inheriting Private members ###
 
 You inherit everything 
 
@@ -110,7 +110,7 @@ Following won't compile:
 2. **MIL** is only allowed to refer to **its own fields** (fields it declare)
 3. Problems happen during the different steps for object construction
 
-####Steps that happens when an object is created:####
+#### Steps that happens when an object is created: ####
 
 - space is allocated
 - **constructed the superclass part of the object (default ctor for superclass)**
@@ -124,7 +124,7 @@ Let's call a *non-default ctor for Book* to hijack step 2
 	Text:: Text(string title, string author, int numPages, string topic)
 		: Book{title,author,numPages}, topic{topic}{}
 
-## Protected Visibility##
+## Protected Visibility ##
 
 Protected members are accessible by the class & its subclasses
 	
@@ -156,7 +156,7 @@ Private is better than protected
 - subclass have full access to anything that is protected -> cannot guarantee variant anymore
 (you can do sth bad by create a subclass and modify the field)
 
-####Advice:####
+#### Advice: ####
 
 *Keep field private, write protected accessors/mutators/methods*
 
@@ -171,7 +171,7 @@ Private is better than protected
 	}
 
 
-##Method Overriding##
+## Method Overriding ##
 
 Different types of Books have different measures to consider it heavy: 
 
@@ -209,7 +209,7 @@ book: numPages > 200 pages | Text: > 500 pages | Comic: > 30 pages
 Placing  a subclass object in the space for a superclass object cause **object slicing**
 
 
-#Lec 15, Method Overriding, Virtual, Pure Virtual, Abstract#
+# Lec 15, Method Overriding, Virtual, Pure Virtual, Abstract #
 
 Last time:
 
