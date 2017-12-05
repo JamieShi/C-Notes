@@ -1,4 +1,4 @@
-# Lec14, System Modelling, UML, Relationship#
+# Lec14, System Modelling, UML, Relationship #
 
 
 ### Relationship 1: Composition ###
@@ -217,7 +217,7 @@ Last time:
 - Sometimes a subclass might want to replace the inherit behavior (method overriding)
 
 
-###Different criteria for determining whether a Book isHeavy###
+### Different criteria for determining whether a Book `isHeavy` ###
 
 	class Book{
 		protected:
@@ -335,7 +335,7 @@ Destruction is the inverse of construction
 
 1. dtor body runs
 2. subclass field destroyed: dtors run for fields that are objects
-3. destructed the superclass part of the object
+3. destructed the superclass part of the object (**dtor of superclass run**)
 3. space is reclaimed
 
 A subclass dtors will always, *automatically* call the superclass dtors.
@@ -350,7 +350,11 @@ A subclass dtors will always, *automatically* call the superclass dtors.
 
 **Advice:**
 
-If a class may have children now as in the future, it should make its dtor `virtual`
+- If a class may have children now as in the future, it should make its dtor `virtual`
+- If you want an abstract class but you don't have a good P.V. method, make dtor P.V.
+- All dtor must be implemented, even P.V. dtor
+	- Subclass need to call superclass dtor
+
 
 ###final###
 - a virtual function cannot be overridden in a derived class
@@ -359,18 +363,18 @@ If a class may have children now as in the future, it should make its dtor `virt
 If a subclass must not be "superclass", then declare is `final`
 
 	class Y final: public X{
-	
+		~~~~~~~~~~
 	}
 	
 	class Z : public Y {~~~}  //won't compile!
 
 
-##Contextual keywords##
+## Contextual keywords ##
 c++11 has "contextual keywords"
 
 - names that act as keywords in certain place
 
-i.e.
+i.e. `=0`
 	
 	class Student{
 	~~~~~~~~
@@ -396,8 +400,7 @@ We would like `Student::fee` to be UN-implemented, but the linkers would give an
 
 Solution: make the method **Pure virtual**
 
-
-#Lecture 16: Pure Virtual, Templates, Exceptions #
+# Lecture 16: Pure Virtual, Templates, Exceptions #
 
 	class Student{
 		virtual int fee() = 0;
@@ -409,19 +412,24 @@ Solution: make the method **Pure virtual**
 		int fee(){~~~~}
 	};
 
-###Pure Virtual Method###
+### Pure Virtual Method ###
 
 - method without an implementation
-- you cannot create objects of type `Student`
+- you CANNOT create objects of type `Student`
 
 		`Student s; //won't compile`
 - A class with at least one P.V. Method is an **abstract class**
 - Subclass of abstract classed must implement all inherited P.V. method to be considered concrete
+- P.V. method does not need to have a input (typically)
 
 **Why create an abstract class?**
 
 - Put the common fields/methods
-- polymosphism
+- Polymorphism
+
+**Concrete classes** : any class without pure virtual method 
+
+By default, if you inherit an abstract class, you are also abstract. Unless you implement all P.V. methods of base class
 
 **UML Notes**
 
@@ -506,9 +514,9 @@ you can put several typenames
 	}
 
 
-##Standard Template Library (STL)##
+## Standard Template Library (STL) ##
 
-###vector###
+### vector ###
  This a template class which automatically re-sizes a **heap allocated array** as needed (dynamic length arrays)
 
 
@@ -521,9 +529,9 @@ you can put several typenames
 	
 	// you don't know the size/cap, you only know the content
 		
-	v.emplace.back(6); // [4,5,6]
-	v.emplace.back(7); // [4,5,6,7]
-	v.pop.back(); //remove last element
+	v.emplace_back(6); // [4,5,6]
+	v.emplace_back(7); // [4,5,6,7]
+	v.pop_back(); //remove last element
 	
 	vector<int> v1(4,5); // [5,5,5,5]
 	vector<int> v2; // empty vector
@@ -560,8 +568,33 @@ i.e
 	
 	it = v.erase(v.begin()+3); //remove the 4th element
 	v.erase(v.end()-1); //mimic the behaviour of popping
+### Vector Tutorial ###
+-------
+- Purpose
+	- Syntax
+		- Note
+- ---
+- Create vertor of type T	
+	- `vector<T> v;`		
+		- calls the default ctor of vector
+- Put element at the back	
+	- `v.emplace_back(x);`
+		- puts a **copy** of x
+- Iterator				
+	- `for (int i=0;i<v.size();++i)`
+		- array style
+	- `for (vector<T>:Iterator it=v.begin();it!=v.end();++it)`
+	- `for (auto n: v)`
+		- iterator
+- Access the ith element
+	- `v[i]`
+		- Unchecked (doesn't check if it is out range)
+	- `v.at(i)`
+		- Checked (it if is not in the range, an exception raised)
+		
 
-##Exception##
+
+## Exception ##
 
 `v[i]` unchecked access
 
@@ -594,7 +627,7 @@ By default, if an exception is not caught, program terminates
 
 	// at least catch will be provided, but only one will be executed
 
-#Lec 17 Exceptions, Design Patterns#
+# Lec 17 Exceptions, Design Patterns #
 
 *callchain.cc*
 
@@ -671,7 +704,7 @@ vs
 
 - throws the original exception that was caught
 
-###C++ exceptions###
+### C++ exceptions ###
 
 - All c++ library exception inherit for the `exception` class
 - user defined exception do NOT have to inherit from `exception`
@@ -742,7 +775,7 @@ We caught exception by reference `&`
 
 `length_error` : attempt to resize vector fails
 
-###exception thrown by destructor###
+### exception thrown by destructor ###
 
 By default, if a dtor throws an exception, the prog terminated right away (`std::terminate` is called)
 
@@ -763,9 +796,9 @@ If you want to, you can change the default,
 
 
 
-##Design Pattern##
+## Design Pattern ##
 
-###Observer Pattern###
+### Observer Pattern ###
 
 - Publish/Subscribe system 
 - Publish/Subject - generates data
@@ -773,25 +806,159 @@ If you want to, you can change the default,
 
 General OO design Strategy
 
-- Create abstract base classed to provide the interface
+- Create abstract base class to provide the interface
 - Use ptrs of this Base class to dynamically call methods
-	- subclasses can be supposed in/out to change behaviour
+	- **subclasses can be supposed in/out to change behaviour**
 
-![Imgur](https://i.imgur.com/v2Kj5lV.jpg?1)
+![Imgur](https://i.imgur.com/e2IOHIu.jpg)
 
-- Note that the Subject class does not actually generate any data
-- Subject simply provides functionality common in all subjects
+- Note that the `Subject` class does not actually generate any data
+- `Subject` simply provides functionality common in all subjects
 - It should be an abstract class
 - We need a P.V. method
 
 Convention: when there is no Pure Virtual methods, but we want the class Abstract
 
 - make the destructor Pure Virtual
-	- pro: subclass already have a built-in dtor 
-	- con: a parent class must always implement a dtor
+	- subclass already have a built-in dtor 
+	- a parent class must always implement a dtor
 		- after all, subclass dtor automatically call the parent ator
 		- So let's implement it!
 - A pure virtual method is allowed to not have a implementation.
 - A pure virtual method must be implemented by a subclass for it to be concrete.
 	
-*SE/*
+*SE/Observer*
+
+*subject.h*
+
+	#include <vector>
+	#include "observer.h"
+
+	class Subject {
+	  std::vector<Observer*> observers;
+
+	 public:
+	  Subject();
+	  void attach(Observer *o);  // emplace_back(o)
+	  void detach(Observer *o);  // if (*it == o) {observers.erase(it);}
+	  void notifyObservers(); // for (auto ob : observers) ob->notify();
+	  virtual ~Subject()=0;
+	};
+
+*observer.h*
+
+	class Observer {
+	 public:
+	  virtual void notify() = 0;
+	  virtual ~Observer(); // Make dtor Virtual / P.V., so that we don't have memory leak
+	};
+
+
+*horserace.h*
+
+
+	class HorseRace: public Subject {
+	  std::fstream in;
+	  std::string lastWinner;
+
+	 public:
+	  HorseRace(std::string source);
+	  ~HorseRace();
+
+	  bool runRace(); // Returns true if a race (read in) was successfully run.
+
+	  std::string getState(); // Return lastWinner
+	};
+
+*bettor.h*
+
+	class Bettor: public Observer {
+	  HorseRace *subject;
+	  const std::string name;
+	  const std::string myHorse;
+
+	 public:
+	  Bettor(HorseRace *hr, std::string name, std::string horse);
+	  void notify() override;   // call subject->getState();
+	  ~Bettor();
+	};
+
+
+*main.cc*
+
+	int main(int argc, char **argv) {
+	  string raceData = "race.txt";
+	  if (argc > 1) {
+	   raceData = argv[1];
+	  }
+
+	  HorseRace hr{raceData};
+
+	  Bettor Larry{&hr, "Larry", "RunsLikeACow"};
+	  Bettor Moe{&hr, "Moe", "Molasses"};
+	  Bettor Curly{&hr, "Curly", "TurtlePower"};
+
+	  int count = 0;
+	  Bettor *Shemp;
+
+	  while(hr.runRace()) {
+	    if (count == 2)
+	      Shemp = new Bettor{&hr, "Shemp", "GreasedLightning"};
+	    if (count == 5) delete Shemp;
+	    hr.notifyObservers();
+	    ++count;
+	  }
+	}	
+
+Output:
+
+	Winner: Molasses
+	Larry loses.
+	Moe wins!
+	Curly loses.
+	Winner: RunsLikeACow
+	Larry wins!
+	Moe loses.
+	Curly loses.
+	// etc.
+
+# Lec 18 Observer Pattern, Decorator Pattern, C++ casting  #
+
+## Observer Pattern ##
+
+Horse Racing
+
+Horse Race -> Subject
+
+Bettor -> Observer
+
+
+	// A4q4: each grid is both a subject and an observer
+
+
+## Decorator Pattern ##
+
+Suppose we have an existing object
+
+- add features / functionality to the object
+
+
+![Imgur](https://i.imgur.com/10g6iCM.jpg)
+
+- Decorator IS A component
+- Decorator HAS A component
+
+code:
+
+	AbsWindow *w = new BasicWindow;
+	w = new Scroll(w);
+	w = new Menu(w);
+
+	// AbsWindow *w = new Menu (new Scroll (new BasicWindow));
+
+- Do I need make decorator a abstract class?
+- Yes. When there is in common, you should put them into a abstract class
+
+## c++ cast ##
+
+cont'd on next lec
