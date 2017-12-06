@@ -476,6 +476,7 @@ virtual:
 	-  an entry to indicate the type of the class
 	-  function pointer for each
 	-  virtual method in the class
+![Imgur](https://i.imgur.com/nJIdkVQ.jpg)
 - bp->isHeavy();
 	- follow ptr to object
 	- follow vptr to get the vtable
