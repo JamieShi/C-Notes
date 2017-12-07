@@ -19,7 +19,7 @@
 - Goal: high cohesion
 
 ## Decouple the interface ##
-Advice: primary classed should not print things
+**Advice:** primary classed should not print things
 
 	class ChessBoard { //game state
 		~~~~~~~~~~~
@@ -72,7 +72,7 @@ Two kinds of relationship
 
 i.e.
 
-controller:
+Controller:
 
 - whose turn?
 - valid input?
@@ -162,9 +162,9 @@ What if 2 ptr points to same heap memory?
 - this would have caused a double free
 - Copy ctor / copy assignment operator for `unique_ptr` are disabled
 
-*unique_ptr/basicimpl.cc* : an basic idea, not using in real life
+*unique_ptr/basicimpl.cc* : an basic idea, not used in real life
 
-- `unique_ptr<T>` cannot be copied but can be moved, so that you can return it (???????)
+- `unique_ptr<T>` cannot be copied but can be moved, so that you can return it in move assignment
 - `std::share_ptr` allows multiple ptrs to the same heap allocated object
 
 share_ptr:
@@ -192,8 +192,6 @@ share_ptr:
 	- `static_pointer_cast`
 	- `const_pointer_cast`
 	- `dynamic_pointer_cast`
-
-(for virtual method??????)
 
 
 ## Exception Safety
@@ -320,7 +318,7 @@ i.e
 	// f : must be a function
 	// paramter type of f must match return type of AbsIter::operator* (i.e. int)
 
-Generalized
+Generalized:
 
 	template<typename Iter, typename Func>
 	void foreach (Iter start, Iter finish, Func f) {
@@ -335,7 +333,7 @@ Generalized
 
 	forEach (a , a + 5, f); // prints the array
 
-Another example
+Another example:
 
 	template <typename T> T min (T x, T y) {
 		return x < y ? x : y;
@@ -446,7 +444,7 @@ how many ints in a vector are even?
 	                             // capture  parameter  lambda body
 
 
-## How Virtual works?
+## Virtual Table
 
 	struct Vec {
 		int x, y;
@@ -456,12 +454,11 @@ how many ints in a vector are even?
 	Vec v;
 	sizeof(v); // 8 bytes (2 integer)
 	
-- Methods are not stored within objects
+- Methods are NOT stored within objects
 
-virtual:
-
-	Book *bp = (~~~~~~) ? new Comic{~~~} : new Book {~~~~~~~};
-	bp->isHeavy(); // which isHeavy()???
+------------------------------------
+	Book *bp = (~~~condition~~~) ? new Comic{~~~} : new Book {~~~~~~~};
+	bp->isHeavy(); // Comic::isHeavy() or Book::isHeavy()?
 	
 	struct Vec2 {	
 		int x, y;
@@ -471,15 +468,25 @@ virtual:
 	Vec2 w;
 	sizeof(w); // 16 bytes (a pointer has been adeed)
 
-- for every class that contains at least 1 virtual method, a virtual table is created
-- Virtual contains
+- For every class that contains at least 1 virtual method, a virtual table is created
+	- Vtable: a lookup table of functions used to resolve functions in a dynamic/late binding manner. 
+	- VTable: a static array that the compiler sets up at compile time.
+	- Every class that uses virtual functions (or is derived from a class that has virtual functions) is given its own vtable
+	- The compiler adds a hidden pointer to the class, which is the vptr
+- Virtual contains 
 	-  an entry to indicate the type of the class
-	-  function pointer for each
+	-  function pointer for each (that points to the most-derived function accessible by that class.)
 	-  virtual method in the class
-![Imgur](https://i.imgur.com/nJIdkVQ.jpg)
-- bp->isHeavy();
-	- follow ptr to object
+![Imgur](https://i.imgur.com/XAIm6Df.jpg)
+- Calling `bp->isHeavy()` (all happens at runtime);
+	1. follow ptr to object
 	- follow vptr to get the vtable
-	- lookup isHeavy funcion ptr in the table,  you end up at
+		- lookup `isHeavy()` funcion ptr in the table
 	- follow the function ptr (no need to know the actual object is, only know address)
-		- slower than stastic dispatch
+		- slower than static dispatch
+- Declaring at least one virtual function adds a vptr to the object. Therefore, classes with no virtual functions produce smaller objects (lower cost) than if some functions were virtual
+
+Question:
+
+- Why does dynamic casting (dynamic_cast) only work on classes with at least one virtual function? 
+- dynamic_cast needs to know what objects we actually have, and the compiler needs the vtable to figure out the type (A class that declares or inherits a virtual function is called a polymorphic class)
