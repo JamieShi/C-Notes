@@ -7,21 +7,14 @@
 
 ### Relationship 3: Inheritance ###
 
-	-------------------    	------------
-	| Book            |		|Textbook			Comic                       
-	-------------------		--------------
-	|-title:String	  |		|-title:			-title:
-	|-authors:String  |		|-authors:			-authors:
-	|-numPages:Integer|		|-numPages			-numPages:
-	|				  |		|-topics:String  	-hero:String
-	-------------------		----------------
-	|                 |
-	-------------------
+![Imgur](https://i.imgur.com/UBOHTv9.png)
 
 It is hard to create collections of those different types of Books
 
 - array of `void*`
-- use a `union` type
+- use a `union` type 
+	- `union [name]  { member-list };`
+	-  [Read more](https://msdn.microsoft.com/en-us/library/5dxy4b7b.aspx)
 
 --------
 Observe:
@@ -31,27 +24,7 @@ Observe:
 
 UML:
 
-			-------
-			| Book                                 
-			-------------------
-			|-title:String			
-			|-authors:String	
-			|-numPages:Integer						
-			---------------
-			|
-			----------------
-					 ^
-    	 ____________|______________
-		|							|	
-	-------
-	|Textbook						Comic                       
-	-------------------
-	|-title:String				-title:
-	|-authors:String			-authors:
-	|-numPages:String			-numPages:
-	|-topics:String  			-hero:String
-	---------------
-
+![Imgur](https://i.imgur.com/vrwcIF1.png)
 
 Code:
 
@@ -99,20 +72,20 @@ Text objects have space the hold a title, author & numPages
 
 How do you even initialize a Text object?
 
-Following won't compile:
+Following WON'T compile:
 
 	Text:: Text(string title, string author, int numPages, string topic)
 		: title{title}, author{author}, numPages{numPages}, topic{topic}{}
 
 **Problems:**
 
-1. title, author, numPages is **private** in Book
-2. **MIL** is only allowed to refer to **its own fields** (fields it declare)
+- title, author, numPages is **private** in Book
+2. **MIL** is only allowed to refer to **its own fields** (fields **it declare**)
 3. Problems happen during the different steps for object construction
 
 #### Steps that happens when an object is created: ####
 
-- space is allocated
+1. space is allocated
 - **constructed the superclass part of the object (default ctor for superclass)**
 - subclass field initialization: default ctor runs for fields that are objects
 - ctor body runs
@@ -185,7 +158,7 @@ book: numPages > 200 pages | Text: > 500 pages | Comic: > 30 pages
 		}
 		
 		bool isHeavy() const{
-			return getNumPages()>200;
+			return getNumPages() > 200;
 		}
 	};
 
@@ -193,7 +166,7 @@ book: numPages > 200 pages | Text: > 500 pages | Comic: > 30 pages
 	....
 		public:
 		bool isHeavy() const{
-			return getNumPages()>30;
+			return getNumPages() > 30;
 		}   // replace the implementation in Book by overriding
 	};
 
@@ -204,10 +177,12 @@ book: numPages > 200 pages | Text: > 500 pages | Comic: > 30 pages
 	Book b = Comic{..,..,40,"Batman"};
 	// legal as a Comic IS A Book
 	b.isHeavy(); 
-	// Book: isHeavy() runs ->false
+	// Book: isHeavy() runs -> false
+
 
 Placing  a subclass object in the space for a superclass object cause **object slicing**
 
+-------------------------------
 
 # Lec 15, Method Overriding, Virtual, Pure Virtual, Abstract #
 
@@ -248,7 +223,7 @@ Last time:
 - Subclass objects are **never smaller** than Superclass objects.
 - When a subclass is placed in a space for a superclass object, the object is **sliced**
 
-###Using Superclass pointless###
+### Using Superclass pointless ###
 
 	Comic c{...,...,40,...};
 	Comic *cp{&c};
@@ -258,14 +233,14 @@ Last time:
 
 ![Demonstration](https://i.imgur.com/z9VBN7K.jpg)
 
-By default, a c++ class compiler looks at the declared type of a pointer / reference to determine which method to call (not the type of object it points/refers to)
+By default, a c++ class compiler looks at the **declared type** of a pointer / reference to determine which method to call (not the type of object it points/refers to)
 
 It is called **Static Dispatch** in compilation
 
 	Book *collection[20]; // it is legal but they are all types of book
 
 ------
-We would like to call methods superclass pointer, and hero the most "specialized" method to executed.
+We would like to call methods superclass pointer, and Comic is the most "specialized" method to executed.
 
 In c++, we can use the `virtual` keyword
 
@@ -282,7 +257,7 @@ In c++, we can use the `virtual` keyword
 		// override is introduced in c++11, it will check superclass for the method
 	};
 
-- if you forget to put both `override` and `const`, it is method OVERLOADING instead of method OVERRIDING
+- if you forget to put both `override` and `const`, it is method *OVERLOADING instead of method OVERRIDING*
 - if you forget to put `override` and make a typo (i.e. isheavy), there are 2 methods in Comic and it is so dangerous!
 
 usage:
@@ -311,7 +286,7 @@ Collection is a **Polymorphic array** (
 
 Polymorphism(many forms): The ability to accommodate multiple types under a single abstraction
 
-##Destructors in the presence of inheritance##
+## Destructors in the presence of inheritance ##
 
 *c++/inheritance/example5*
 
@@ -326,7 +301,7 @@ Polymorphism(many forms): The ability to accommodate multiple types under a sing
 	class Y: public X {
 	  int *y;
 	 public:
-	  Y(int n, int m): X{n}, y{new int [m]} {} // X{n} hijack step2
+	  Y(int n, int m): X{n}, y{new int [m]} {} // X{n} hijack step2 in ctor
 	  ~Y() { delete [] y; }
 	};
 
@@ -336,27 +311,25 @@ Destruction is the inverse of construction
 1. dtor body runs
 2. subclass field destroyed: dtors run for fields that are objects
 3. destructed the superclass part of the object (**dtor of superclass run**)
-3. space is reclaimed
+4. space is reclaimed
 
-A subclass dtors will always, *automatically* call the superclass dtors.
+A subclass dtors will **always**, **automatically** call the superclass dtors.
  
 	// Run with valgrind
 	int main () {
 	  X *xp = new Y{5, 10};
-
 	  delete xp;  
 	   //if dtor it is not virtual, will call just ~X() -> memory leaks for field y
 	}
 
-**Advice:**
-
-- If a class may have children now as in the future, it should make its dtor `virtual`
+### Advice: 
+- If a class may have children now as in the future, it should **make its dtor `virtual` (avoid memory leak)**
 - If you want an abstract class but you don't have a good P.V. method, make dtor P.V.
-- All dtor must be implemented, even P.V. dtor
+- **All dtor must be implemented**, even P.V. dtor
 	- Subclass need to call superclass dtor
 
 
-###final###
+### `final`
 - a virtual function cannot be overridden in a derived class
 - Or, a derived class cannot be inherited from.
  
@@ -374,7 +347,7 @@ c++11 has "contextual keywords"
 
 - names that act as keywords in certain place
 
-i.e. `=0`
+i.e. `= 0`
 	
 	class Student{
 	~~~~~~~~
@@ -396,7 +369,7 @@ i.e. `=0`
 		int fee() override {~~~~}
 	};
 
-We would like `Student::fee` to be UN-implemented, but the linkers would give an error
+We would like `Student::fee()` to be UN-implemented, but the linkers would give an error
 
 Solution: make the method **Pure virtual**
 
@@ -416,10 +389,10 @@ Solution: make the method **Pure virtual**
 
 - method without an implementation
 - you CANNOT create objects of type `Student`
-
-		`Student s; //won't compile`
+	
+	`Student s; //won't compile`
 - A class with at least one P.V. Method is an **abstract class**
-- Subclass of abstract classed must implement all inherited P.V. method to be considered concrete
+- Subclass of abstract classed must implement all inherited P.V. method to be considered **concrete**
 - P.V. method does not need to have a input (typically)
 
 **Why create an abstract class?**
@@ -427,7 +400,7 @@ Solution: make the method **Pure virtual**
 - Put the common fields/methods
 - Polymorphism
 
-**Concrete classes** : any class without pure virtual method 
+**Concrete classes**: any class without pure virtual method 
 
 By default, if you inherit an abstract class, you are also abstract. Unless you implement all P.V. methods of base class
 
@@ -435,7 +408,7 @@ By default, if you inherit an abstract class, you are also abstract. Unless you 
 
 - Virtual / Pure Virtual --- *italics*
 - Abstract class --- *class name in italics*
-- static --- underline
+- static --- underline   (i.e. `numInstance`)
 - protected --- #
 
 ## C++ templates ##
@@ -445,7 +418,6 @@ What if we want different types of contents?
 **C++ template class** are parameterized on type variables.
 
 	template <typename T>
-
 	class Stack {
 		T *contents;
 		int size;
@@ -460,7 +432,7 @@ What if we want different types of contents?
 The types are provided when creating objects of that template class
 
 	Stack<int> sInts;
-	sInts.push(s);
+	sInts.push(5);
 
 	Stack<string> sStrings;
 	sStrings.push("hello");
@@ -476,26 +448,28 @@ you can put several typenames
 
 	template <typename T> class List {
 
-	struct Node {
-		T data;
-		Node *next;		
-	};
+		struct Node {
+			T data;
+			Node *next;		
+		};
 
-	Node *theList = nullptr;
+		Node *theList = nullptr;
 
 	public:
-	class Iterator {
-		Node *curr;
-		Iterator(Node *curr) ~~~~~~~~~~~~~
-		public:
-		T &operator*() {~~~~~~~~~~~}
-		~~~~~~~~
-		friend theList<T>;  // only type <T> is a friend
-	};
+		class Iterator {
+			Node *curr;
+			Iterator(Node *curr) ~~~~~~~~~~~~~
+			public:
+			T &operator*() {~~~~~~~~~~~}
+			~~~~~~~~
+			friend class List<T>;  // only type <T> is a friend
+		};
 	
-	T ith(int i){~~~~~~~~~~~~~}
-	void addToFront(T &n){~~~~~~} // since we don't know the type of n, we don't want to make a copy of it if it is big
-		
+		T ith(int i){~~~~~~~~~~~~~}
+		void addToFront(T &n){~~~~~~} // since we don't know the type of n, we don't want to make a copy of it if it is big
+	};
+
+	
 	List<int> l1;
 	int x = 5;
 	l1.addToFront(x);
@@ -503,7 +477,7 @@ you can put several typenames
 	List<List<int>> l2;
 	l2.addToFront(l1);
 	
-	for (List<int>::Iterator it = l1.begin();it!=l1.end();++it){
+	for (List<int>::Iterator it = l1.begin(); it != l1.end(); ++it){
 		~~~~~~
 	}
 
@@ -541,7 +515,7 @@ you can put several typenames
 	}
 	// i is unchecked, if i is out of range, behaviour is undefinde
 
-	for (vector<int>::iterator it = v.begin(); it != v.end(); ++it){
+	for (vector<int>::Iterator it = v.begin(); it != v.end(); ++it){
 		cout << *it << endl;
 	}
 
@@ -549,8 +523,8 @@ you can put several typenames
 		cout << n << endl;
 	}
 
-	for(vector<int>::reverse-iterator it = v.rbegin(); it !=v.rend(); ++it)  //rend(): the one before the first element
-
+	for(vector<int>::reverse-iterator it = v.rbegin(); it !=v.rend(); ++it) 
+	// rend(): the one before the first element
 	// you cannot using auto for reverse iterator!!!!
 
 
@@ -562,7 +536,7 @@ Many STL classes have methods that expect Iterator as a parameter
 When you make changes to a vector, internal element might move
 
 - this means all existing **iterators** becomes invalid
-- `erase` return a new Iterator that ~~~~~~~~~ (look it up!!!)
+- `erase` return a new Iterator that points to the new location of the element that followed the last element erased by the function call. This is the container end `.end()` if the operation erased the last element in the sequence.
 
 i.e
 	
@@ -581,9 +555,9 @@ i.e
 	- `v.emplace_back(x);`
 		- puts a **copy** of x
 - Iterator				
-	- `for (int i=0;i<v.size();++i)`
+	- `for (int i=0;i < v.size();++i)`
 		- array style
-	- `for (vector<T>:Iterator it=v.begin();it!=v.end();++it)`
+	- `for (vector<T>:Iterator it = v.begin();it != v.end();++it)`
 	- `for (auto n: v)`
 		- iterator
 - Access the ith element
@@ -592,8 +566,6 @@ i.e
 	- `v.at(i)`
 		- Checked (it if is not in the range, an exception raised)
 		
-
-
 ## Exception ##
 
 `v[i]` unchecked access
@@ -663,7 +635,7 @@ output:
 	Range error
 	Finish main
 
-stack unwinding (popping up function) in stack frame: in search of a handler for a  particular exception
+**Stack unwinding** (popping up function) in stack frame: in search of a handler for a  particular exception
 
 A scope is exited by: 
 
@@ -695,7 +667,7 @@ Error recovering can be done in stage
 
 `throw s;` 
 
-- if  the caught exception was actually a subtype of SomExp, the exception object is sliced
+- if  the caught exception was actually a sub type of SomeExp, the exception object is sliced
 - we are throwing the sliced object
 
 vs 
@@ -777,7 +749,7 @@ We caught exception by reference `&`
 
 ### exception thrown by destructor ###
 
-By default, if a dtor throws an exception, the prog terminated right away (`std::terminate` is called)
+By default, if a dtor throws an exception, the program terminated right away (`std::terminate` is called)
 
 - no option to do error recovering
 
