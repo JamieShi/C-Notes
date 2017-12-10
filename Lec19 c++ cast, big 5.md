@@ -737,7 +737,7 @@ File *e.h*
 File *windowimpl.h*
 
 	#include<Xlib>
-	class XwindowImpl {	
+	struct XwindowImpl {	
 	  Display *d;
 	  Window w;
 	  int s;
@@ -778,7 +778,9 @@ We can generate the pImpl idiom to accommodate multiple implementation
 
 This is an extension of the "pImplementation" idiom with subclasses to abstract alternate implementations. It is often found in graphical applications, like when we switch the window style or a back-end engine.
 
-The bridge pattern makes it easy to swap out implementations. It separates an abstraction from its implementation so we can change either separately.
+The bridge pattern makes it easy to swap out implementations. It separates an abstraction(`Window`) from its implementation(`WIndowImpl`) so we can change either separately.
+
+It is based on **Single Responsibility principle**, and establish "bridge" between different responsibility
 
 ![Imgur](https://i.imgur.com/QtIG3lE.jpg)
 
