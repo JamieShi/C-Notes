@@ -16,7 +16,7 @@ C++ style Casts: 4 types
 	
 ### static_cast ###
 
-"sensible"casts where the behaviour is well defined
+"sensible" casts where the behaviour is well defined
 
 	void foo(int x) {~~~~~~~}
 	void foo(donble x){~~~~~~~}
@@ -37,11 +37,11 @@ If we are sure that `bp` does indeed point to a `text` object, we can use `stati
 
 
 	Text *tp = static_cast<Text*>(bp);
-						 // -- IS A --
+	                  // -- IS A --
 	tp->getTopic();
 If your assumption is not correct, the code still compiles even executes. The behavior is undefined.
 
-### reinterpret cast ###
+### reinterpret_cast ###
 - anything & everything is allowed
 - "weird" conversion 
 
@@ -50,7 +50,7 @@ i.e.
 	Student s;
 	Turtle *t = reinterpret_cast<Turtle*>(&s);
 
-reinterpret cast relies on low-leveled compiler specific knowledge of how objects are organized in memory (c style)
+Reinterpret cast relies on low-leveled compiler specific knowledge of how objects are organized in memory (c style)
 
 It can modify the private field of another class
 
@@ -65,13 +65,15 @@ Cast to remove / add `const` from a value
 
 	g(const_cast<int *>(q)); // will compile
 
-### dynamic cast ###
+### dynamic_cast ###
+
+Safely converts pointers and references to classes up, down, and sideways along the inheritance hierarchy.
 
 	vector<Book *> books;
 	~~~~~~~
 	~~~~~~~
 	Book *bp = books[i];
-	// We want down cast.
+	// We want to downcast polymorphic type.
 
 Incorrect:
 	
@@ -79,11 +81,12 @@ Incorrect:
 	tp->getTipic();
 	// the behaviour is undefined if bp is not pointing a Text object
 
-We can use **dynamic_cast** to tentatively try the type conversion & see if it succeeds.
-
+We can use **dynamic_cast** to tentatively try the type conversion & see if it succeeds. (return `nullptr`  if fails)
+ 
 	Text *tp = dynamic_cast<Text*>(bp);
 	// if it succeeds, then tp is a valid ptr to the Text object
 	// if it fails, then tp is set to nullptr
+
 	if(tp) cout << tp->getTopic();
 	else cout << "Not a Textbook";
 
@@ -93,7 +96,8 @@ To use dynamic_cast, the class hierarchy must have **at least one virtual method
 
 - thats okay as we make dtors virtual
 
-### RTTI (Runtime Type Information) ###
+---------------
+#### RTTI (Runtime Type Information) ###
 
 	void whatIsIt(Book *bp){
 		if (dynamic_cast<Text *>(bp))
@@ -110,12 +114,12 @@ A better approach is to use **virtual method**.
 
 ----------------------------
 
-Dynamic_cast works on *references*
+#### dynamic_cast works on references
 
 	Book &rb = ~~~~~~~~;
 	Text &tr = dynamic_cast<Text &>(rb);
 	
-If rb is actually a reference to Text, then tr is a valid reference to this object.
+If `rb` is actually a reference to Text, then `tr` is a valid reference to this object.
 
 What if it is not?
 
@@ -135,7 +139,7 @@ What if it is not?
 	};
 
 	Text a{~~~~~};
-	Text b = a; // copt ctor is called
+	Text b = a; // copy ctor is called
 
 The free copy ctor for Text is called.
 
@@ -342,7 +346,7 @@ example:
 	List::Iterator begin = l.begin(); // pass begin by lvalue since we want to modify it
 	foreach(begin, l.end(), addFive); 
 
-Why use absIterator?
+Why use absIterator? - Once `foreach` is implemented, you can use it for all class
 
 ## Factory Method Pattern ##
 
@@ -382,9 +386,14 @@ Benefit:
 	- `addToFront` is a factory of Nodes
 	-  `begin` / `end` are Iterator factories
 
+![Imgur](https://i.imgur.com/zMXm1b2.jpg)
+
 ## Template Method Pattern ##
 
-Subclass are meant to provide implementation for some methods other methods must remain the same
+- Subclass are meant to provide implementation for some methods
+- Other methods must remain the same
+
+i.e.
 
 	class Turtle{
 	public:
@@ -481,10 +490,14 @@ Without NVI
 
 ![Imgur](https://i.imgur.com/AEO0t99.png)
 
+	Player *p = ~~;
+	Level *l = ~~;
+	Enemy *e = nullptr;
+
 	virtual void Enemy::strike (Rock &) = 0;
 	virtual void Enemy::strike (Stick &) = 0;
 
-	Enemy *e = e->createEnemy();
+	Enemy *e = l->createEnemy();
 	Weapon *w = p->chooseWeapon();
 
 	e->strike(*w);
@@ -493,9 +506,8 @@ Without NVI
 
 ## Visitor Design Pattern ##
 
-- Combination of method overriding & method overloading
+Combination of method **overriding** & method **overloading**
 
-code:
 
 	class Enemy {
 	public:
@@ -506,7 +518,7 @@ code:
 	public:
 		void strike(Weapon &w) override {
 			w.useOn(*this); 
-			// it this code got executed, the compiler would know *this is a  Turtle, 100%		
+			// it this code got executed, the compiler would know *this is a  Turtle,certainly
 		}
 	};
 
@@ -536,11 +548,14 @@ code:
 	virtual void Enemy::strike (Rock &) = 0;
 	virtual void Enemy::strike (Stick &) = 0;
 
-	Enemy *e = e->createEnemy();	// Turtle
+	Enemy *e = l->createEnemy();	// Turtle
 	Weapon *w = p->chooseWeapon();	// Rock
 
 	e->strike(*w);
 
+	// type of *e to use strike()? --- Enemy::strike() is virtual / P.V.
+	// type of *w as augument of strike()? --- Weapon::useOn() is virtual
+	// type of *e as argument of useOn()? --- useOn(*this)
 
 - VDP can be used to add functionality that is different based on the type of the object but without making changes to the class hierarchy 
 	- as long as the class hierarchy has been set up to accept visitor
@@ -583,7 +598,7 @@ code:
 - Text by topic
 - Comic by hero
 
-- `map<string,int>`
+`map<string,int>`
 
 - Without visitor method, you need to create a virtual method catalog, and implemented it in each subclass
 
@@ -609,10 +624,14 @@ VDP:
 - `visit` creates/updates key-value pairs in map
 - `accept` will call `visit`
 
-**SE/visistor won't compile because of cycle of includes**
+![Imgur](https://i.imgur.com/1OJMJwn.jpg)
+
+**SE/visitor won't compile because of cycle of includes**
 
 - `Book` want to include `bookVisitor`
 - `bookVisitor` want to include `Book`
+
+![Imgur](https://i.imgur.com/ifMOXfR.jpg)
 
 ## Compilation Dependency ##
 
@@ -679,18 +698,17 @@ File *e.h*
 		A foo(A a); 
 	};
 
+
 ### Reducing Dependencies ###
 
-window.h
+*window.h*
 
 	#include <X11/Xlib.h>
-
 	class Xwindow {
 	  Display *d;
 	  Window w;
 	  int s;
 	  GC gc;
-
 	  ~~~~~~~~~~~~
 
 	 public:
@@ -705,20 +723,21 @@ window.h
 
 	w->drawRectangle(~~);
 
-- every time window.h changes, graphicsdiaplay must recompile
+- every time window.h changes, graphicsdisplay must recompile
 - even if the change is only to a private member
 
 **Advice:**
 
 - Remove all private members in to external implementation class
-- Replace these with a Pointer to the Implemenation
+- Replace these with a Pointer to the Implementation
 - It is called **pImpl Idiom**
 
-File *window.h*
+### pImpl Idiom
+
+File *windowimpl.h*
 
 	#include<Xlib>
-
-	class XwindowInput {	
+	class XwindowImpl {	
 	  Display *d;
 	  Window w;
 	  int s;
@@ -727,30 +746,37 @@ File *window.h*
 
 File *window.h*
 
-	class XWindowInpl;
+	class XWindowImpl; 	// forward declaration
 	
 	class Xwindow {
-		XwindowInpl *pImpl;	
+		XwindowImpl *pImpl;	 // No compilation dependency on XWindowImpl.h
 		~~~~~
 	};
 
 
-FIle *window.cc*
+File *window.cc*
 
 	#include "window.h"
 	#include "windowimpl.h"
 
-	Xwindow:: Xwindow(): pImpl {new XwindowImpl} {}
+	Xwindow:: Xwindow(): pImpl {new XwindowImpl} {} //MIL
 	~~~~~~~~~~
-	pImpl->d;
+	// replace d in method with pImpl->d;
+
+*graphicsdisplay.cc*
+
+	#include "window.h"
+
+- Only *window.cc* needs to recompile (no need to recompile *graphicsdisplay.cc*) if you change XWindow’s implementation.
 
 ![Imgur](https://i.imgur.com/kaypNW4.jpg)
 
+
 We can generate the pImpl idiom to accommodate multiple implementation
 
-### Bridge pattern ###
+## Bridge pattern
 
-This is an extension of the "pImplementation" idiom with subclasses to abstract alternate implementations. It is often found in graphical applications, like when we switch the window style or a backend engine.
+This is an extension of the "pImplementation" idiom with subclasses to abstract alternate implementations. It is often found in graphical applications, like when we switch the window style or a back-end engine.
 
 The bridge pattern makes it easy to swap out implementations. It separates an abstraction from its implementation so we can change either separately.
 
