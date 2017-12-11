@@ -22,7 +22,7 @@
 - MATH 235 - Linear Algebra 2 for Honours Mathematics
 - CS 370 - Numerical Computation (Or 2019 W)
 
-### 2B, 2019 Fall (Co-op)
+### 2B, 2018 Fall (Co-op)
 
 ### 3A, 2019 Winter
 - CS 350 - Operating Systems
