@@ -19,7 +19,7 @@
 - CS 241 - Foundations of Sequential Programs
 - MATH 239
 - FINE 229
-- CS 370
+- CS 370 - Numerical Computation
 - MATH 235
 
 ### 3A, 2019 Winter
@@ -33,6 +33,7 @@
 - CS 383 - Computational Digital Art Studio
 - PMATH 370 - Chaos and fractals 
 
+
 ## CS course I want to take:
 - CS 484 - Computational Vision
 - CS 475 - Computational Linear Algebra
@@ -40,3 +41,9 @@
 ### PMATH course I want to take:
 - PMATH 320 - Euclidean Geometry
 - PMATH 321 - Non-Euclidean Geometry
+
+### CO course I want to take:
+- CO 342 - Introduction to Graph Theory
+
+### ECE course I want to take:
+- ECE 417 - Image Processing
