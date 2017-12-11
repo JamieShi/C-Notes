@@ -22,6 +22,8 @@
 - MATH 235 - Linear Algebra 2 for Honours Mathematics
 - CS 370 - Numerical Computation (Or 2019 W)
 
+### 2B, 2019 Fall (Co-op)
+
 ### 3A, 2019 Winter
 - CS 350 - Operating Systems
 - CS 341 - Algorithms
@@ -29,11 +31,14 @@
 - CS 370 - Numerical Computation
 - FINE 257 - Video, New Media & the Digital Turn
 
+### 3A, 2019 Spring (Co-op)
+
+### 3A, 2019 Fall (Co-op)
+
 ### 3B, 2020 Winter
 - CS 488 - Introduction to Computer Graphics
 - CS 383 - Computational Digital Art Studio
 - PMATH 370 - Chaos and fractals 
-
 
 ### CS course I want to take:
 - CS 484 - Computational Vision
