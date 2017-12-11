@@ -19,13 +19,14 @@
 - CS 241 - Foundations of Sequential Programs
 - MATH 239
 - FINE 229
-- CS 370 - Numerical Computation
 - MATH 235
+- CS 370 - Numerical Computation (Or 2019 W)
 
 ### 3A, 2019 Winter
 - CS 350 - Operating Systems
 - CS 341 - Algorithms
 - CS 349 - User Interfaces
+- CS 370 - Numerical Computation
 - FINE 257
 
 ### 3B, 2020 Winter
