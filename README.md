@@ -45,12 +45,19 @@
 - CS 475 - Computational Linear Algebra
 - CS 486 - Introduction to Artificial Intelligence
 
-### PMATH course I want to take:
+### MATH course I want to take:
 - PMATH 320 - Euclidean Geometry
 - PMATH 321 - Non-Euclidean Geometry
+- PMATH 365 - Differential Geometry
+- AMATH 390 - Mathematics and Music
 
 ### CO course I want to take:
 - CO 342 - Introduction to Graph Theory
 
-### ECE course I want to take:
+### Engineer course I want to take:
 - ECE 417 - Image Processing
+- SYDE 372 - Introduction to Pattern Recognition
+
+### STAT course I want to take:
+- STAT 442 - Data Visualization
+- STAT 441 - Statistical Learning - Classification
