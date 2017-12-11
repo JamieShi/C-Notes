@@ -34,9 +34,10 @@
 - PMATH 370 - Chaos and fractals 
 
 
-## CS course I want to take:
+### CS course I want to take:
 - CS 484 - Computational Vision
 - CS 475 - Computational Linear Algebra
+- CS 486 - Introduction to Artificial Intelligence
 
 ### PMATH course I want to take:
 - PMATH 320 - Euclidean Geometry
