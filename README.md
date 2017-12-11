@@ -8,18 +8,18 @@
 - CS 245E - Logic and Computation (Enriched)
 - CS 246 - Object-Oriented Software Development 
 - CS 251 - Computer Organization and Design
-- FINE 101
-- FINE 100
+- FINE 101 - Art History and Visual Culture
+- FINE 100 - Studio Fundamentals
 
 ### 2B, 2018 Winter (Co-op)
-- STAT 231
+- STAT 231 - Statistics 
 
 ### 2B, 2018 Spring
 - CS 240 - Data Structures and Data Management
 - CS 241 - Foundations of Sequential Programs
-- MATH 239
-- FINE 229
-- MATH 235
+- MATH 249 - Introduction to Combinatorics (Advanced Level)
+- FINE 229 - Hybrid Digital Media
+- MATH 235 - Linear Algebra 2 for Honours Mathematics
 - CS 370 - Numerical Computation (Or 2019 W)
 
 ### 3A, 2019 Winter
@@ -27,7 +27,7 @@
 - CS 341 - Algorithms
 - CS 349 - User Interfaces
 - CS 370 - Numerical Computation
-- FINE 257
+- FINE 257 - Video, New Media & the Digital Turn
 
 ### 3B, 2020 Winter
 - CS 488 - Introduction to Computer Graphics
