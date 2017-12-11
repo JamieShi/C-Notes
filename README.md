@@ -54,7 +54,7 @@
 ### CO course I want to take:
 - CO 342 - Introduction to Graph Theory
 
-### Engineer course I want to take:
+### Engineering course I want to take:
 - ECE 417 - Image Processing
 - SYDE 372 - Introduction to Pattern Recognition
 
