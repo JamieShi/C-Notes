@@ -46,6 +46,7 @@
 - PMATH 320 - Euclidean Geometry
 
 ### CS course I want to take:
+- CS 343 - Concurrent and Parallel Programming
 - CS 484 - Computational Vision
 
 ### MATH course I want to take:
