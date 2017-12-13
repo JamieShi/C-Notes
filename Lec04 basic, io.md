@@ -23,9 +23,18 @@ c++99 -> c++03 -> c++11 -> c++14 -> c++17
 
 ## Compile ##
 
-**sth here**
+	$g++-5 -std=c++14 hello.cc -o myprogram
 
-### pass argument to c++##
+	// same as
+	$g++14 hello.cc -o myprogram
+
+run it:
+
+	./myprogram
+
+
+### pass command-line argument to c++
+
 	#include <iostream>
 	using namespace std;
 
@@ -33,10 +42,12 @@ c++99 -> c++03 -> c++11 -> c++14 -> c++17
 	  cout << "Number of arguments: " << argc - 1 << endl;
 	  cout << "Arguments: " << endl;
 	  for (int i = 1; i < argc; ++i) {
-	    string theArg = argv[i];
+	    string theArg = argv[i]; 
 	    cout << " " << i << ": " << theArg << endl;
 	  }
 	}
+
+	// argv[0] is program name
 
 
 # Lec5, Input/Output control
@@ -45,15 +56,20 @@ c++99 -> c++03 -> c++11 -> c++14 -> c++17
 
     #include <iostream>
 	using namespace std;
-something here
+
+	int main () {
+	  int x, y;
+	  cin >> x >> y;
+	  cout << x + y << endl;
+	}
 
 - cin ignores white space by default
 
-  - `cin >> skipws;`  include whitespace
-  - `cin >> noskipws;` ignore whitespace 
+  - `cin >> skipws;`  skip whitespace
+  - `cin >> noskipws;` include whitespace 
   - from the `<iostream>` header. 
 - If read fails, an int value is set to **0** (c++17)
-- If it is too big, `int_max` will be read
+- If it is too big, it is set as`int_max` 
 - If it is too small, `int_min`
 - Id read fails due to EOF, int is set to 0
 
@@ -94,7 +110,7 @@ i.e. cin can used as a bool. cin is true if last read succeeded
 	  int i;
 	  while (true) {
 	    cin >> i;
-	    if (!cin) break;   // !cin == cin.fail()
+	    if (!cin) break;   //  cin.fail()
 	    cout << i << endl;
 	  }
 	}
@@ -110,7 +126,7 @@ i.e. cin can used as a bool. cin is true if last read succeeded
 	     21/2^3 = 2
 
 - any operator can be given special meaning determined by the types of operands
-- If `>>` is used as input operator, the expansion produce the LHS (i.e. `cin`)
+- If `>>` is used as input operator, the expression produce the LHS (i.e. `cin`)
 
 **cascading reads**
 
@@ -151,9 +167,9 @@ Read all int i. Echo to stdout until EOF, ignore non-int input
 	  while (true) {
 	    if (!(cin >> i)) {
 	      if (cin.eof()) break;
-	      else {
-	        cin.clear();    //acknowledge fail, lower the fail flag
-	        cin.ignore();   //discard one char
+	      else { // if cin fail due to bad input
+	        cin.clear();    // acknowledge fail, lower the fail flag
+	        cin.ignore();   // discard one char
 	      }                 
           // if not using, once fail, all subsequnt fail -> infinite loop
 	    }
@@ -163,7 +179,7 @@ Read all int i. Echo to stdout until EOF, ignore non-int input
 	  }
 	}
     
- When an input failure occurs and cin.fail() returns true, the input buffer (cin) is placed in an "error state", and further input processing will not work unless you "clear the error state" by calling cin.clear()
+When an input failure occurs and cin.fail() returns true, the input buffer (cin) is placed in an "error state", and further input processing will not work unless you "clear the error state" by calling cin.clear()
 
 i.e.
 
@@ -172,7 +188,13 @@ i.e.
 	
 ## Read/Write Strings ##
 
-**something here**
+	#include <string>
+
+	int main() {
+		string s;
+		cin >> s;
+		cout << s << endl;
+	}
 
 - stdin is different from arguments ( " has no special meaning)
 
@@ -182,26 +204,25 @@ i.e.
 	> "Hello
 - cin will read from the first non-whitespace char until it hits a whitespace char
 
-##Format Specifies ##
+## Format Specifies
 In c ......
 
 In c++, we use **I/O manipulators** to format I/O
 
+	#include <iomanip>
+
 	int x = 95;
 	cout << x; //print decimal
 	cout << hex << x; //print in hex (all the following cout)
-	cout << dex << x; //print decimal
-
-`<iomanip>`
+	cout << dec << x; //print decimal
 
 	float price = 2.00;
 	cout << fixed << showpoint << setprecision(2) << price << endl;
 
 - `showpoint` format flag : decimal point is always written   
 - `setprecision(2)`: as many digits as necessary are written to match the precision set for the stream (if any).
-
 - `boolalpha` format flag : bool values are inserted/extracted by their textual representation (true or false), instead of integral values (1 or 0).
-- ignore white space or not
+- `skipws`, `noskipwsignore`: white space or not
 
 Read an entire line
 
@@ -225,21 +246,19 @@ Read an entire line
 The file is *automatically* closed when the stack allocated variable goes out of scope.
 
 
-# Lec6
+# Lec6 
 
 
 *io/buildString.cc*
-
 
 	#include <sstream>
 	int main () {
 	  ostringstream ss;   // write to string
 	  int lo {1}, hi {100};
 	  ss << "Enter a # between " << lo << " and " << hi;
-	  string s {ss.str()};  //convert ss to s
+	  string s {ss.str()};  //convert stream to string
 	  cout << s << endl;
 	}
-
 
 *io/getNum.cc*
 
@@ -250,7 +269,7 @@ ensure that the input is an integer
 	  while (true) {
 	    cout << "Enter a number:" << endl;
 	    string s;
-	    cin >> s;   //succed as long as user type something
+	    cin >> s;   //succeed as long as user type something
 	    istringstream ss{s};
 	    if (ss >> n) break;
 	    cout << "not a number";
@@ -259,9 +278,12 @@ ensure that the input is an integer
 	}
 
 
-###String###
+### String
 	
-something here
+c string are null-terminated character array
+
+- manage your own memory
+- error prone i.e. overwrite null terminator
 
 c++ string type
 
@@ -289,11 +311,11 @@ c++: string can use operator
 
 review:
 
-	"a" < "b"
+	"a" < "b"g
 	"a" < "ab"
 	"A" < "a"  //Since A has ASCII value 65; a has a higher ASCII value
 
-## Default Argument##
+## Default Argument
 
 	void printFile (string name = "file.txt"){
 	 ifstream fs{name};
@@ -313,7 +335,7 @@ Function parameters in c++ can be given default value:
 	`void foo(int x = 5, string str);   //ILLEGAL!!`
 	`void foo (<with default>,<without default>)` is invalid
 
-- if you are going to leave something not in a function call, it has to be last parameter, if they have default value.
+- if you are going to leave something not in a function call, it has to be last parameter, if they have default value.  **default value as last argument**
 
 i.e.
 
@@ -326,19 +348,20 @@ i.e.
 	//foo("str");    X
 	//foo(,"str");   X
 
-## Function overloading##
+## Function overloading
 
 	void foo (int,string);
 	void foo (int);
 	void foo ();
 
 - In c, it is illegal for two functions to have the same name
-- In c++, functions can have the same name as long as the differs in the number and/or types of parameters
+- In c++, functions can have the same name as long as the differs in the number and/or types of **parameters**
 
-	some code here
+	`int negate (int b) { return -b; }`
+	`bool negate (bool x) { return !x; }`
+	`Illigal in c, legal in c++`
 
 - It is not enough for function to only differ on the return type
-
 
 **c++ operators are implemented as functions**
 
@@ -348,17 +371,18 @@ i.e.
 **c++ compiler are able to figure out which function to call base on parameter**
 
 	void foo (int x);
-	//void foo (int x, int y = 10);  ILLEGAL
-	foo(42);   ambiguous call
-
-
+	//void foo (int x, int y = 10);  ILLEGAL, because
+	foo(42);   //ambiguous call
 
 ## struct ##
 
 In C,
 
-sth here
-
+	struct Node{
+		int data;
+		struct Node *next;
+	};
+	struct Node n = {5,null};
 
 In c++, 
 
@@ -369,7 +393,7 @@ In c++,
 
 	Node n{5,nullptr};
 
-The following code is ILLEGAL?
+Why the following code is ILLEGAL?
 
 	struct Node{
      int data;
@@ -378,16 +402,33 @@ The following code is ILLEGAL?
 
 You can NEVER allocate a variable of type Node. Try to figure out the size of Node will cause **infinite loop**
 
-###Parameter Passing (Review)###
+### Parameter Passing (Review)
 
-sth here
+pass by value
 
-pass by value vs. pass by parameter
+	void inc (int n) {
+		n = n + 1;
+	}
+
+	int x = 5;
+	inc (x);
+	cout << x << endl; // print 5, pass by value (copy of x)
+
+pass by pointer
+
+	void inc (int *n) 	{
+		*n = *n + 1;
+	}
+	int c (&x);
+	// print 6	 
+
 
 **Passing parameter to input stream**
 
 	cin >> x;
-	operator >> (cin,x); // seems no "&", but actually x is passed by reference
+	operator >> (cin,x); 
+	// How do we change x?
+	// seems no "&", but actually x is passed by reference
 
 	//scanf("%d",&x);
 
@@ -400,16 +441,19 @@ z is a **lvalue reference** to y
 
 lvalue reference is like a **constant pointer** with automatically dereference.
 
-sth here
+	z = 15; // not *z = 15
+	int *p = &z; // p ends up point to y
 
-Things you cannot do with reference
-
+- z mimics y
+- z is another name / alias for y
+	
+### Things you cannot do with reference
 - You cannot leave them uninitialized
 
 	`int &z;  //ILLEGAL!`
 - Must be initialized to a lvalue (something that has an **address**, refers to an actual storage location)
 
-ILLEGAL:
+ILLEGAL
 
 	//int &z = 3;
 	//int &z = x+y; 
@@ -418,10 +462,16 @@ ILLEGAL:
 - you cannot create a reference to a reference
 - you cannot create a array of reference
 
-some code here
+pass by reference 
+
+	void inc (int &n) {
+		n = n + 1;
+	}
+	int x = 5;
+	inc(x); // x is 6
 
 
-#Lec 7, Short Topic, Preprocessor, Sep 28th#
+# Lec 7, Short Topic, Preprocessor, Sep 28th
 
 Why does `cin >> x` works?
 
@@ -431,7 +481,7 @@ Why does `cin >> x` works?
 **Para1 `in` is also passed be reference**
 
 - changes made to `in`, need to be visible outside (i.e. `cin.clear()`)
-- stream cannot by copied  [https://stackoverflow.com/questions/6010864/why-copying-stringstream-is-not-allowed](https://stackoverflow.com/questions/6010864/why-copying-stringstream-is-not-allowed "Reason")
+- stream cannot by copied  [ReadMore](https://stackoverflow.com/questions/6010864/why-copying-stringstream-is-not-allowed "Reason")
 
 i.e.
 
@@ -441,7 +491,7 @@ i.e.
 	}
 
 
-### Passing by value vs. Passing by reference###
+### Passing by value vs. Passing by reference
 
 	struct ReallyBig{...}
 	void f (ReallyBig rb){...}
@@ -481,7 +531,7 @@ Advice: prefer to pass by reference to constant for anything bigger than an int
 	bar(y+y);
 
 
-## Dynamic Memory##
+## Dynamic Memory
 
 In c, we use malloc/free
 
@@ -501,13 +551,13 @@ In c++, malloc/free is forbidden. Instead, we use new/delete
 
 sth here (review of 136)
 
-### Allocate arrays###
+### Allocate arrays
 
 	Node *myarr = new Node[10];
 	...
 	delete [] myarr;
 
-### Return by value###
+### Return by value
 
 	Node getANode(){
 	 Node n;
@@ -523,7 +573,7 @@ Tempting to do:
 
 After function called, `&n` is a **dangling pointer** pointing to memory no longer to use.
 
-Advice: 
+#### Advice: 
 
 - a function should *never return a pointer/reference to a stack allocated variable* that it created. 
 - It can return a ptr/reference to a heap allocated variable.
@@ -577,7 +627,7 @@ c++ allows us to give meaning to operator for types we create
 
 passing two reference & return by reference
 
-## Preprocessor##
+## Preprocessor
 
 - It runs before the compiler
 - modifies the code before the compiler sees it
@@ -632,10 +682,7 @@ preprocess.cc
 
 
 
-
-	
-
-#Lec 8, Preprocessor, c++ class, Oct 3rd#
+# Lec 8, Preprocessor, c++ class, Oct 3rd#
 
 	#define VAR
 	// value is the empty string
@@ -655,7 +702,7 @@ To enable debug without changing cc file
 	g++14 -DDEBUG debug.cc
 	g++14 debug.cc
 
-## Separate Compilation##
+## Separate Compilation
 
 It is good to divide a program into 
 
@@ -664,7 +711,7 @@ It is good to divide a program into
 
 *c++/separate/example1*
 
-### How to compile?###
+### How to compile?
 
 	g++14 main.cc vector.cc
 or
@@ -699,7 +746,8 @@ Produce **object file**
 - binary
 - indicate provided & required
 - link together
-	`$g++14 main.o vector.o`
+
+	`$g++14 main.o vector.o -o myprogram`
 
 ### Sharing a global var in different files###
 
@@ -742,9 +790,10 @@ Advice:
 
 - Never put `using namespace std;`  in a head file
 
-instead, ...... sth here
+instead, using the full name
+std::string std::istream
 
 
 ## C++ class ##
 
-(in next .md fileS) 
+(in next lecture) 
