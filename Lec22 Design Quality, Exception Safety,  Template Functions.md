@@ -230,6 +230,8 @@ Example:
 - Can we rewrite code to provide a strong guarantee?
 - **Idea**: instead of trying to undo things, let's "do" the things on copies. If we succeed, swap the copies with the assigned
 
+#### copy and swap Idiom: 
+##### `std::swap()`
 execute copy then swap:
 
 	C::f(){
