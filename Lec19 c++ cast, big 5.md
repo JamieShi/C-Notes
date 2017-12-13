@@ -749,7 +749,7 @@ File *window.h*
 	class XWindowImpl; 	// forward declaration
 	
 	class Xwindow {
-		XwindowImpl *pImpl;	 // No compilation dependency on XWindowImpl.h
+		XwindowImpl *pImpl;	 
 		~~~~~
 	};
 
@@ -766,6 +766,7 @@ File *window.cc*
 *graphicsdisplay.cc*
 
 	#include "window.h"
+	// No compilation dependency on XWindowImpl.h
 
 - Only *window.cc* needs to recompile (no need to recompile *graphicsdisplay.cc*) if you change XWindow’s implementation.
 

@@ -1,4 +1,4 @@
-# Lec 12 short topic: arrays of objects, Invariants of Encapsulation #
+end# Lec 12 short topic: arrays of objects, Invariants of Encapsulation #
 
 cont'd
  
@@ -234,7 +234,7 @@ A range-based for loops can be used for a class, `MyClass` if
 2. the iterator class must implement `!=`, prefix `++`, unary `*`
 
 ------
-### end of midterm###
+### end of midterm
 --------
 
 ## Friendship ##
@@ -301,7 +301,7 @@ i.e.
 	 return out;
 	}
 
-### Static keyword##
+### Static keyword ##
 A **static field** is associated with a class, but not any object of the class.
 
  - there is one memory location for each static field, not each object
@@ -334,7 +334,7 @@ main.cc
 	 cout << Student:: numInstance << endl;
 	}
 
-#### static member function####
+#### static member function
 We can also have static member functions
 
 - these functions can be called without  an  object of this class
@@ -348,14 +348,14 @@ student.cc
 - static member functions do not have `this` pointer.
 - static member functions can only access static field & call static member function
 
-## System Modeling##
+## System Modeling
 
 Design before you implement:
 
 1. what are the main class
 2. what are the relationships between classes
 
-###UML: Unified Modeling Language##
+### UML: Unified Modeling Language
 
 Represent a class in UML
 
@@ -372,7 +372,7 @@ Represent a class in UML
 	- private
 	+ public
 	
-#### Relationship 1: Composition####
+#### Relationship 1: Composition
 
 	class Vec{
 	 int x,y;
@@ -405,7 +405,7 @@ i.e.
 
 
 
-#Lec14, System Modelling, UML, Relationship#
+# Lec14, System Modelling, UML, Relationship
 
 Last time
 
@@ -451,7 +451,7 @@ Carparts in a catalog
 
 We say a catalog HAS A carpart
 
-##Relationship 2: Aggregation##
+## Relationship 2: Aggregation
 
 A "HAS A" B is
 

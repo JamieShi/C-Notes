@@ -55,6 +55,21 @@ code
 	}
 
 ## 2. Forward Declaration
+
+	class K: public A{
+	B b;
+	C* c;
+	public:
+	D& d;
+	void foo(E);
+	void foo(F*);
+	void foo(G&);
+	H func();
+	I* func2();
+	J& func3();
+	};
+	std::istream& operator<<(std::istream&, const K&);
+
 ### Forward Declaration:
 - C
 - D (because it is a reference)

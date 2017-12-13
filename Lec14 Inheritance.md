@@ -80,15 +80,15 @@ Following WON'T compile:
 **Problems:**
 
 - title, author, numPages is **private** in Book
-2. **MIL** is only allowed to refer to **its own fields** (fields **it declare**)
-3. Problems happen during the different steps for object construction
+-  **MIL** is only allowed to refer to **its own fields** (fields **it declare**
+-  Problems happen during the different steps for object construction
 
 #### Steps that happens when an object is created: ####
 
 1. space is allocated
-- **constructed the superclass part of the object (default ctor for superclass)**
-- subclass field initialization: default ctor runs for fields that are objects
-- ctor body runs
+2. **constructed the superclass part of the object (default ctor for superclass)**
+3. subclass field initialization: default ctor runs for fields that are objects
+4. ctor body runs
 
 Step 2 will fail because Book does not have a default ctor
 
@@ -801,6 +801,10 @@ Convention: when there is no Pure Virtual methods, but we want the class Abstrac
 	
 *SE/Observer*
 
+1. Subject’s state is updated()
+2. Subject::notifyObservers() -> calls each observer’s notify();
+3. Each observer calls ConcreteSubject::getState() to react accordingly
+
 *subject.h*
 
 	#include <vector>
@@ -931,6 +935,50 @@ code:
 - Do I need make decorator a abstract class?
 - Yes. When there is in common, you should put them into a abstract class
 
+*SE/Decoration*
+
+*component*
+
+	class Pizza {
+	 public:
+	  virtual float price() = 0;
+	  virtual std::string description() = 0;
+	  virtual ~Pizza() = default;
+	};
+
+*concrete component*
+
+	class CrustAndSauce: public Pizza {
+	 public:
+	  float price() override  { return 5.99; };
+	  string description() override  { return "Pizza"; };
+	};
+
+*decoration*
+
+	class Decorator: public Pizza {
+	 protected:
+	  Pizza *component;
+	 public:
+	  Decorator(Pizza *component) : component{component} {};
+	  virtual ~Decorator() { delete component; };
+	};
+
+*concrete decoration*
+
+	class Topping: public Decorator {
+	  string theTopping;
+	  const float thePrice;
+	 public:
+	  Topping(std::string topping, Pizza *component) :
+		 Decorator{component}, theTopping{topping}, thePrice{0.75} {};
+	  float price() override { return component->price() + thePrice; };
+	  string description() override  {
+		 return component->description() + " with " + theTopping;
+	  }
+	};
+
+
 ## c++ cast ##
 
-cont'd on next lec
+cont'd on next lecture
