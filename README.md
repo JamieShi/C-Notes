@@ -1,8 +1,9 @@
 # CPP-Notes
-
+CS 246 course notes, uWaterloo
 Thank Mr. Goose
 
 ## Reference
+Some notes help me when I learned this course.
 - [Dadi Zhang](http://dzed.me/notes/2016/05/02/Cs-246.html)
 - [Anthony Zhang](http://anthony-zhang.me/University-Notes/CS246/CS246.html)
 
@@ -31,7 +32,6 @@ Thank Mr. Goose
 - CS 350 - Operating Systems
 - CS 341 - Algorithms
 - CS 349 - User Interfaces
-- CS 370 - Numerical Computation
 - FINE 257 - Video, New Media & the Digital Turn
 
 ### 3A, 2019 Spring (Co-op)
